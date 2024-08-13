@@ -299,6 +299,10 @@ dat$blood <- ifelse(dat$date == "2024-02-08", "Blood 1",
                                   "Blood 4")))
 dat$blood <- as.factor(dat$blood)
 
+dat$blood_num <- ifelse(dat$date == "2024-02-08", 1, 
+                      ifelse(dat$date == "2024-02-19", 2,
+                             ifelse(dat$date == "2024-02-20", 3, 4)))
+
 length(which(is.na(dat$nlr) == TRUE))
 dat <- dat %>% 
   filter(nlr != "NA")
@@ -383,6 +387,221 @@ treat_fig
 #        height = 8,
 #        width = 12,
 #        units = "in")
+
+
+# figure with blood samples on x axis and slopes between each plotted
+unique(dat$treatment)
+# spline_control <- as.data.frame(spline(dat$blood_num[dat$treatment == "control"],
+#                                        dat$nlr[dat$treatment == "control"]))
+control_dat <- dat[dat$treatment == "control", ]
+control_dat_12 <- control_dat[control_dat$blood_num == 1 | control_dat$blood_num == 2, ]
+control_dat_23 <- control_dat[control_dat$blood_num == 2 | control_dat$blood_num == 3, ]
+control_dat_34 <- control_dat[control_dat$blood_num == 3 | control_dat$blood_num == 4, ]
+pfas_high_dat <- dat[dat$treatment == "pfas_high", ]
+pfas_high_dat_12 <- pfas_high_dat[pfas_high_dat$blood_num == 1 | pfas_high_dat$blood_num == 2, ]
+pfas_high_dat_23 <- pfas_high_dat[pfas_high_dat$blood_num == 2 | pfas_high_dat$blood_num == 3, ]
+pfas_high_dat_34 <- pfas_high_dat[pfas_high_dat$blood_num == 3 | pfas_high_dat$blood_num == 4, ]
+pfas_low_dat <- dat[dat$treatment == "pfas_low", ]
+pfas_low_dat_12 <- pfas_low_dat[pfas_low_dat$blood_num == 1 | pfas_low_dat$blood_num == 2, ]
+pfas_low_dat_23 <- pfas_low_dat[pfas_low_dat$blood_num == 2 | pfas_low_dat$blood_num == 3, ]
+pfas_low_dat_34 <- pfas_low_dat[pfas_low_dat$blood_num == 3 | pfas_low_dat$blood_num == 4, ]
+cd_high_dat <- dat[dat$treatment == "cd_high", ]
+cd_high_dat_12 <- cd_high_dat[cd_high_dat$blood_num == 1 | cd_high_dat$blood_num == 2, ]
+cd_high_dat_23 <- cd_high_dat[cd_high_dat$blood_num == 2 | cd_high_dat$blood_num == 3, ]
+cd_high_dat_34 <- cd_high_dat[cd_high_dat$blood_num == 3 | cd_high_dat$blood_num == 4, ]
+cd_low_dat <- dat[dat$treatment == "cd_low", ]
+cd_low_dat_12 <- cd_low_dat[cd_low_dat$blood_num == 1 | cd_low_dat$blood_num == 2, ]
+cd_low_dat_23 <- cd_low_dat[cd_low_dat$blood_num == 2 | cd_low_dat$blood_num == 3, ]
+cd_low_dat_34 <- cd_low_dat[cd_low_dat$blood_num == 3 | cd_low_dat$blood_num == 4, ]
+
+ind.slopes.fig <- 
+  ggplot() +
+  geom_jitter(mapping = aes(x = blood_num,
+                           y = nlr,
+                           color = treatment),
+             size = 3,
+             alpha = 0.30,
+             width = 0.15,
+             data = dat) +
+  geom_line(mapping = aes(x = blood_num,
+                            y = nlr,
+                            color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = control_dat_12) +
+  geom_line(mapping = aes(x = blood_num,
+                          y = nlr,
+                          color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = control_dat_23) +
+  geom_line(mapping = aes(x = blood_num,
+                          y = nlr,
+                          color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = control_dat_34) +
+  geom_line(mapping = aes(x = blood_num,
+                            y = nlr,
+                            color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = pfas_high_dat_12) +
+  geom_line(mapping = aes(x = blood_num,
+                          y = nlr,
+                          color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = pfas_high_dat_23) +
+  geom_line(mapping = aes(x = blood_num,
+                          y = nlr,
+                          color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = pfas_high_dat_34) +
+  geom_line(mapping = aes(x = blood_num,
+                            y = nlr,
+                            color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = pfas_low_dat_12) +
+  geom_line(mapping = aes(x = blood_num,
+                          y = nlr,
+                          color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = pfas_low_dat_23) +
+  geom_line(mapping = aes(x = blood_num,
+                          y = nlr,
+                          color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = pfas_low_dat_34) +
+  geom_line(mapping = aes(x = blood_num,
+                            y = nlr,
+                            color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = cd_high_dat_12) +
+  geom_line(mapping = aes(x = blood_num,
+                          y = nlr,
+                          color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = cd_high_dat_23) +
+  geom_line(mapping = aes(x = blood_num,
+                          y = nlr,
+                          color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = cd_high_dat_34) +
+  geom_line(mapping = aes(x = blood_num,
+                            y = nlr,
+                            color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = cd_low_dat_12) +
+  geom_line(mapping = aes(x = blood_num,
+                          y = nlr,
+                          color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = cd_low_dat_23) +
+  geom_line(mapping = aes(x = blood_num,
+                          y = nlr,
+                          color = treatment),
+            stat = "smooth",
+            method = "lm",
+            lwd = 2,
+            se = FALSE,
+            alpha = 0.75,
+            position = position_dodge(0.3),
+            data = cd_low_dat_34) +
+  scale_color_manual(values = custom_colors, labels = treat_labels) +
+  labs(y = "Neutrophil-to-Lymphocyte Ratio (NLR)",
+       x = "Blood Sample") +
+  geom_vline(xintercept = 1.5, linetype = "dashed", color = "black", linewidth = 0.5) +
+  annotate(geom = "text", x = 1.6, y = 4, angle = 60, label = "Treatment", color = "black") +
+  geom_vline(xintercept = 2.5, linetype = "dashed", color = "black", linewidth = 0.5) +
+  annotate(geom = "text", x = 2.55, y = 4, angle = 60, label = "Salt", color = "black") +
+  theme_bw() +
+  theme(legend.position = c(0.10, 0.85),
+        legend.title = element_blank(),
+        legend.text = element_text(face = "bold", size = 12),
+        legend.background = element_rect(fill = "transparent"), 
+        axis.text.x = element_text(size = 11,
+                                   face = "bold",
+                                   angle = 45,
+                                   vjust = 0.6),
+        axis.title.x = element_text(size = 13,
+                                    face = "bold"),
+        axis.text.y = element_text(size = 13,
+                                   face = "bold"),
+        axis.title.y = element_text(size = 13,
+                                    face = "bold"),
+        strip.text = element_text(size = 11,
+                                  face = "bold"),
+        strip.background = element_rect(fill = "grey90"))
+ind.slopes.fig
+
+
+
 
 
 ### group * date ###
