@@ -599,7 +599,19 @@ ind.slopes.fig <-
                                   face = "bold"),
         strip.background = element_rect(fill = "grey90"))
 ind.slopes.fig
-
+### save figure ###
+# ggsave("writing/figures/ind.slopes_treat_figure.png",
+#        plot = ind.slopes.fig,
+#        dpi = 1000,
+#        height = 8,
+#        width = 12,
+#        units = "in")
+# ggsave("writing/figures/ind.slopes_treat_figure.pdf",
+#        plot = ind.slopes.fig,
+#        dpi = 1000,
+#        height = 8,
+#        width = 12,
+#        units = "in")
 
 
 
