@@ -339,14 +339,14 @@ treat_labels <- c(`control` = "Control",
                   `pfas_high` = "PFPeA High")
 treat_fig <- 
   ggplot() +
-    geom_jitter(mapping = aes(x = date,
+    geom_jitter(mapping = aes(x = blood,
                              y = nlr,
                              color = treatment), 
                 width = 0.0,
                 size = 4,
                 alpha = 0.50,
                 data = dat) +
-    geom_smooth(mapping = aes(x = date,
+    geom_smooth(mapping = aes(x = blood,
                               y = nlr,
                               color = treatment),
                 method = "lm",
@@ -377,18 +377,18 @@ treat_fig <-
 treat_fig
 
 ### save figure ###
-ggsave("writing/figures/treat_figure.png",
-       plot = treat_fig,
-       dpi = 1000,
-       height = 4,
-       width = 12,
-       units = "in")
-ggsave("writing/figures/treat_figure.pdf",
-       plot = treat_fig,
-       dpi = 1000,
-       height = 4,
-       width = 12,
-       units = "in")
+# ggsave("writing/figures/treat_figure.png",
+#        plot = treat_fig,
+#        dpi = 1000,
+#        height = 4,
+#        width = 12,
+#        units = "in")
+# ggsave("writing/figures/treat_figure.pdf",
+#        plot = treat_fig,
+#        dpi = 1000,
+#        height = 4,
+#        width = 12,
+#        units = "in")
 
 
 # figure with blood samples on x axis and slopes between each plotted
