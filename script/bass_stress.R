@@ -353,7 +353,9 @@ treat_fig <-
                 lwd = 2,
                 se = FALSE,
                 data = dat) +
-    facet_wrap(~treatment, labeller = labeller(treatment = treat_labels)) +
+    facet_wrap(~treatment, 
+               labeller = labeller(treatment = treat_labels), 
+               ncol = 5) +
     scale_color_manual(values = custom_colors) +
     labs(y = "Neutrophil-to-Lymphocyte Ratio (NLR)") +
     geom_vline(xintercept = 1.5, linetype = "solid", color = "black", linewidth = 0.5) +
@@ -375,18 +377,18 @@ treat_fig <-
 treat_fig
 
 ### save figure ###
-# ggsave("writing/figures/treat_figure.png",
-#        plot = treat_fig,
-#        dpi = 1000,
-#        height = 8,
-#        width = 12,
-#        units = "in")
-# ggsave("writing/figures/treat_figure.pdf",
-#        plot = treat_fig,
-#        dpi = 1000,
-#        height = 8,
-#        width = 12,
-#        units = "in")
+ggsave("writing/figures/treat_figure.png",
+       plot = treat_fig,
+       dpi = 1000,
+       height = 4,
+       width = 12,
+       units = "in")
+ggsave("writing/figures/treat_figure.pdf",
+       plot = treat_fig,
+       dpi = 1000,
+       height = 4,
+       width = 12,
+       units = "in")
 
 
 # figure with blood samples on x axis and slopes between each plotted
