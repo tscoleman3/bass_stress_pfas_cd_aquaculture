@@ -27,6 +27,8 @@ library(fitdistrplus) # test distributions
 library(lubridate)    # date
 library(ggpubr)       # ggplot arrange
 library(stringr)      # character replacement
+library(glmmTMB)      # glmm
+
 
 
 ##### ----------------------------------------------------------------------------------------------
@@ -617,57 +619,141 @@ ind.slopes.fig
 
 
 
-
+### this group of models is old, go below ###
 ### group * date ###
 # do groups respond differently temporally 
 # blood 1 ref 
-fit_control_b1 <- glm(nlr ~ relevel(treatment, ref = "control") * blood,
-                                 data = dat,
-                                 family = Gamma(link = "log"))
-fit_cd_high_b1 <- glm(nlr ~ relevel(treatment, ref = "cd_high") * blood,
-                                 data = dat,
-                                 family = Gamma(link = "log"))
-fit_cd_low_b1 <- glm(nlr ~ relevel(treatment, ref = "cd_low") * blood,
-                                 data = dat,
-                                 family = Gamma(link = "log"))
-fit_pfas_high_b1 <- glm(nlr ~ relevel(treatment, ref = "pfas_high") * blood,
-                                 data = dat,
-                                 family = Gamma(link = "log"))
-fit_pfas_low_b1 <- glm(nlr ~ relevel(treatment, ref = "pfas_low") * blood,
-                                 data = dat,
-                                 family = Gamma(link = "log"))
+# fit_control_b1 <- glm(nlr ~ relevel(treatment, ref = "control") * blood,
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# fit_cd_high_b1 <- glm(nlr ~ relevel(treatment, ref = "cd_high") * blood,
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# fit_cd_low_b1 <- glm(nlr ~ relevel(treatment, ref = "cd_low") * blood,
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# fit_pfas_high_b1 <- glm(nlr ~ relevel(treatment, ref = "pfas_high") * blood,
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# fit_pfas_low_b1 <- glm(nlr ~ relevel(treatment, ref = "pfas_low") * blood,
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# # blood 2 ref
+# fit_control_b2 <- glm(nlr ~ relevel(treatment, ref = "control") * relevel(blood, ref = "Blood 2"),
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# fit_cd_high_b2 <- glm(nlr ~ relevel(treatment, ref = "cd_high") * relevel(blood, ref = "Blood 2"),
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# fit_cd_low_b2 <- glm(nlr ~ relevel(treatment, ref = "cd_low") * relevel(blood, ref = "Blood 2"),
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# fit_pfas_high_b2 <- glm(nlr ~ relevel(treatment, ref = "pfas_high") * relevel(blood, ref = "Blood 2"),
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# fit_pfas_low_b2 <- glm(nlr ~ relevel(treatment, ref = "pfas_low") * relevel(blood, ref = "Blood 2"),
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# # blood 3 ref
+# fit_control_b3 <- glm(nlr ~ relevel(treatment, ref = "control") * relevel(blood, ref = "Blood 3"),
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# fit_cd_high_b3 <- glm(nlr ~ relevel(treatment, ref = "cd_high") * relevel(blood, ref = "Blood 3"),
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# fit_cd_low_b3 <- glm(nlr ~ relevel(treatment, ref = "cd_low") * relevel(blood, ref = "Blood 3"),
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# fit_pfas_high_b3 <- glm(nlr ~ relevel(treatment, ref = "pfas_high") * relevel(blood, ref = "Blood 3"),
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+# fit_pfas_low_b3 <- glm(nlr ~ relevel(treatment, ref = "pfas_low") * relevel(blood, ref = "Blood 3"),
+#                                  data = dat,
+#                                  family = Gamma(link = "log"))
+
+
+
+### same models as above, but w/ a random effect of tank ###
+### group * date ###
+# do groups respond differently temporally 
+# blood 1 ref 
+fit_control_b1 <- glmmTMB(nlr ~ relevel(treatment, ref = "control") * 
+                            blood + 
+                            (1|id),
+                          data = dat,
+                          family = Gamma(link = "log"))
+fit_cd_high_b1 <- glmmTMB(nlr ~ relevel(treatment, ref = "cd_high") * 
+                            blood + 
+                            (1|id),
+                          data = dat,
+                          family = Gamma(link = "log"))
+fit_cd_low_b1 <- glmmTMB(nlr ~ relevel(treatment, ref = "cd_low") * 
+                           blood + 
+                           (1|id),
+                         data = dat,
+                         family = Gamma(link = "log"))
+fit_pfas_high_b1 <- glmmTMB(nlr ~ relevel(treatment, ref = "pfas_high") * 
+                              blood +
+                              (1|id),
+                            data = dat,
+                            family = Gamma(link = "log"))
+fit_pfas_low_b1 <- glmmTMB(nlr ~ relevel(treatment, ref = "pfas_low") * 
+                             blood + 
+                             (1|id),
+                           data = dat,
+                           family = Gamma(link = "log"))
 # blood 2 ref
-fit_control_b2 <- glm(nlr ~ relevel(treatment, ref = "control") * relevel(blood, ref = "Blood 2"),
-                                 data = dat,
-                                 family = Gamma(link = "log"))
-fit_cd_high_b2 <- glm(nlr ~ relevel(treatment, ref = "cd_high") * relevel(blood, ref = "Blood 2"),
-                                 data = dat,
-                                 family = Gamma(link = "log"))
-fit_cd_low_b2 <- glm(nlr ~ relevel(treatment, ref = "cd_low") * relevel(blood, ref = "Blood 2"),
-                                 data = dat,
-                                 family = Gamma(link = "log"))
-fit_pfas_high_b2 <- glm(nlr ~ relevel(treatment, ref = "pfas_high") * relevel(blood, ref = "Blood 2"),
-                                 data = dat,
-                                 family = Gamma(link = "log"))
-fit_pfas_low_b2 <- glm(nlr ~ relevel(treatment, ref = "pfas_low") * relevel(blood, ref = "Blood 2"),
-                                 data = dat,
-                                 family = Gamma(link = "log"))
+fit_control_b2 <- glmmTMB(nlr ~ relevel(treatment, ref = "control") * 
+                            relevel(blood, ref = "Blood 2") +
+                            (1|id),
+                          data = dat,
+                          family = Gamma(link = "log"))
+fit_cd_high_b2 <- glmmTMB(nlr ~ relevel(treatment, ref = "cd_high") * 
+                            relevel(blood, ref = "Blood 2") +
+                            (1|id),
+                          data = dat,
+                          family = Gamma(link = "log"))
+fit_cd_low_b2 <- glmmTMB(nlr ~ relevel(treatment, ref = "cd_low") * 
+                           relevel(blood, ref = "Blood 2") +
+                           (1|id),
+                         data = dat,
+                         family = Gamma(link = "log"))
+fit_pfas_high_b2 <- glmmTMB(nlr ~ relevel(treatment, ref = "pfas_high") * 
+                              relevel(blood, ref = "Blood 2") +
+                              (1|id),
+                            data = dat,
+                            family = Gamma(link = "log"))
+fit_pfas_low_b2 <- glmmTMB(nlr ~ relevel(treatment, ref = "pfas_low") * 
+                             relevel(blood, ref = "Blood 2") +
+                             (1|id),
+                           data = dat,
+                           family = Gamma(link = "log"))
 # blood 3 ref
-fit_control_b3 <- glm(nlr ~ relevel(treatment, ref = "control") * relevel(blood, ref = "Blood 3"),
-                                 data = dat,
-                                 family = Gamma(link = "log"))
-fit_cd_high_b3 <- glm(nlr ~ relevel(treatment, ref = "cd_high") * relevel(blood, ref = "Blood 3"),
-                                 data = dat,
-                                 family = Gamma(link = "log"))
-fit_cd_low_b3 <- glm(nlr ~ relevel(treatment, ref = "cd_low") * relevel(blood, ref = "Blood 3"),
-                                 data = dat,
-                                 family = Gamma(link = "log"))
-fit_pfas_high_b3 <- glm(nlr ~ relevel(treatment, ref = "pfas_high") * relevel(blood, ref = "Blood 3"),
-                                 data = dat,
-                                 family = Gamma(link = "log"))
-fit_pfas_low_b3 <- glm(nlr ~ relevel(treatment, ref = "pfas_low") * relevel(blood, ref = "Blood 3"),
-                                 data = dat,
-                                 family = Gamma(link = "log"))
+fit_control_b3 <- glmmTMB(nlr ~ relevel(treatment, ref = "control") * 
+                            relevel(blood, ref = "Blood 3") + 
+                            (1|id),
+                          data = dat,
+                          family = Gamma(link = "log"))
+fit_cd_high_b3 <- glmmTMB(nlr ~ relevel(treatment, ref = "cd_high") *
+                            relevel(blood, ref = "Blood 3") +
+                            (1|id),
+                          data = dat,
+                          family = Gamma(link = "log"))
+fit_cd_low_b3 <- glmmTMB(nlr ~ relevel(treatment, ref = "cd_low") *
+                           relevel(blood, ref = "Blood 3") +
+                           (1|id),
+                         data = dat,
+                         family = Gamma(link = "log"))
+fit_pfas_high_b3 <- glmmTMB(nlr ~ relevel(treatment, ref = "pfas_high") * 
+                              relevel(blood, ref = "Blood 3") +
+                              (1|id),
+                            data = dat,
+                            family = Gamma(link = "log"))
+fit_pfas_low_b3 <- glmmTMB(nlr ~ relevel(treatment, ref = "pfas_low") * 
+                             relevel(blood, ref = "Blood 3") + 
+                             (1|id),
+                           data = dat,
+                           family = Gamma(link = "log"))
 summary(fit_control_b1)
 anova(fit_control_b1)
 
