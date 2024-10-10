@@ -125,6 +125,10 @@ temp_plot <-
                        breaks = custom_breaks,
                        labels = custom_labels) +  # Apply custom color palette
     theme_classic() +
+    geom_vline(xintercept = 3, linetype = "dashed", color = "black", linewidth = 0.5) +
+    # annotate(geom = "text", x = 3.25, y = 22.5, angle = 60, label = "Treatment", color = "black") +
+    geom_vline(xintercept = 6.25, linetype = "dashed", color = "black", linewidth = 0.5) +
+    # annotate(geom = "text", x = 6.40, y = 22.5, angle = 60, label = "Salt", color = "black") +
     theme(legend.position = "none",
           axis.text.x = element_blank(),
           axis.title.x = element_blank(),
@@ -145,12 +149,16 @@ do_plot <-
              alpha = 0.60) +
   labs(x = "", 
        y = "Dissolved Oxygen (mg/L)") +
-  scale_y_continuous(limits = c(5, 10)) +
+  scale_y_continuous(limits = c(7, 11)) +
   scale_color_manual(values = custom_colors,
                      name = "Group",
                      breaks = custom_breaks,
                      labels = custom_labels) +  
   theme_classic() +
+  geom_vline(xintercept = 3, linetype = "dashed", color = "black", linewidth = 0.5) +
+  annotate(geom = "text", x = 3.29, y = 10.85, angle = 60, label = "Treatment", color = "black") +
+  geom_vline(xintercept = 6.25, linetype = "dashed", color = "black", linewidth = 0.5) +
+  annotate(geom = "text", x = 6.40, y = 10.85, angle = 60, label = "Salt", color = "black") +
   theme(legend.position = "none",
         axis.text.x = element_text(size = 11,
                                    face = "bold",
@@ -182,6 +190,10 @@ ph_plot <-
                      breaks = custom_breaks,
                      labels = custom_labels) +  
   theme_classic() +
+  geom_vline(xintercept = 3, linetype = "dashed", color = "black", linewidth = 0.5) +
+  # annotate(geom = "text", x = 3.25, y = 9.25, angle = 60, label = "Treatment", color = "black") +
+  geom_vline(xintercept = 6.25, linetype = "dashed", color = "black", linewidth = 0.5) +
+  # annotate(geom = "text", x = 6.40, y = 9.25, angle = 60, label = "Salt", color = "black") +
   theme(legend.position = "none",
         axis.text.x = element_blank(),
         axis.title.x = element_blank(),
@@ -208,7 +220,11 @@ salt_plot <-
                      breaks = custom_breaks,
                      labels = custom_labels) +  
   theme_classic() +
-  theme(legend.position = c(0.35, 0.6),
+  geom_vline(xintercept = 3, linetype = "dashed", color = "black", linewidth = 0.5) +
+  annotate(geom = "text", x = 3.29, y = 5, angle = 60, label = "Treatment", color = "black") +
+  geom_vline(xintercept = 6.25, linetype = "dashed", color = "black", linewidth = 0.5) +
+  annotate(geom = "text", x = 6.40, y = 5, angle = 60, label = "Salt", color = "black") +
+  theme(legend.position = c(0.15, 0.6),
         legend.text = element_text(size = 10,
                                    face = "bold"),
         legend.title = element_text(size = 10,
