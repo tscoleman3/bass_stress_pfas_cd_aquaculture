@@ -286,11 +286,26 @@ dat <- dat_og
 dat$date <- mdy(dat_og$date_arrive)
 dat$id <- as.factor(dat_og$id)
 dat$wr <- as.numeric(dat_og$condition_num)
+dat$length <- as.numeric(dat_og$length)
+dat$weight <- as.numeric(dat_og$weight)
 dat$nlr <- as.numeric(dat_og$nlr)
 dat$treatment <- (dat_og$treatment)
 
-dat <- dat[ ,c("date", "id", "wr", "treatment", "nlr")]
+dat <- dat[ ,c("date", "id", "length", "weight", "wr", "treatment", "nlr")]
 summary(dat)
+
+### some summary stats for results ###
+mean(dat[dat$date == "2024-02-06" & dat$treatment == "cd_high", ]$length)
+mean(dat[dat$date == "2024-02-06" & dat$treatment == "cd_high", ]$wr)
+summarySE(dat, measurevar = "length", groupvars = "date")
+summarySE(dat, measurevar = "wr", groupvars = "treatment", na.rm = TRUE)
+summarySE(dat, measurevar = "wr", groupvars = c("treatment", "date"), na.rm = TRUE)
+summarySE(dat_ysi, measurevar = "sal.ppt", groupvars = "salt", na.rm = TRUE)
+# how many blood smears in each group?
+count_nlr <- dat %>% 
+  dplyr::group_by(treatment) %>% 
+  dplyr::summarize(count = n())
+count_nlr
 
 # remove treatment group na's
 dat <- dat %>% 
@@ -327,6 +342,8 @@ dat <- dat %>%
 
 hist(dat$nlr,
      breaks = 50)
+hist(log(dat$nlr),
+     breaks = 10)
 unique(dat$nlr)
 
 
@@ -345,6 +362,9 @@ descdist(log(dat$nlr),
 plotdist(dat$nlr,
          histo = TRUE, 
          demp = TRUE)
+plotdist(log(dat$nlr),
+         histo = TRUE, 
+         demp = TRUE)
 
 summarySE(data = dat, measurevar = "nlr", groupvars = c("treatment", "blood"))
 # order dayday column
@@ -355,6 +375,21 @@ treat_labels <- c(`control` = "Control",
                   `cd_high` = "Cd High",
                   `pfas_low` = "PFPeA Low",
                   `pfas_high` = "PFPeA High")
+custom_colors <- c("cd_high" = "red",
+                   "cd_low" = "hotpink",
+                   "control" = "gray50",
+                   "pfas_low" = "deepskyblue",
+                   "pfas_high" = "navy")
+custom_labels <- c("Cadmium High",
+                   "Cadmium Low",
+                   "Control",
+                   "PFPeA High",
+                   "PFPeA Low")
+custom_breaks <- c("cd_high", 
+                   "cd_low",
+                   "control",
+                   "pfas_high",
+                   "pfas_low")
 treat_fig <- 
   ggplot() +
     geom_jitter(mapping = aes(x = blood,
@@ -771,7 +806,7 @@ fit_pfas_low_b3 <- glmmTMB(nlr ~ relevel(treatment, ref = "pfas_low") *
                            data = dat,
                            family = Gamma(link = "log"))
 summary(fit_control_b1)
-anova(fit_control_b1)
+# anova(fit_control_b1)
 
 summary(fit_cd_high_b1)
 summary(fit_cd_low_b1)
