@@ -20,6 +20,14 @@ rm(list=ls())
 ##### ----------------------------------------------------------------------------------------------
 ##### PACKAGES NEEDED ------------------------------------------------------------------------------
 ##### ----------------------------------------------------------------------------------------------
+# install.packages("dplyr")
+# install.packages("ggplot2")      # figures
+# install.packages("Rmisc")        # random cool functions
+# install.packages("fitdistrplus") # test distributions
+# install.packages("lubridate")    # date
+# install.packages("ggpubr")       # ggplot arrange
+# install.packages("stringr")      # character replacement
+# install.packages("glmmTMB")      # glmm
 library(dplyr)
 library(ggplot2)      # figures
 library(Rmisc)        # random cool functions
