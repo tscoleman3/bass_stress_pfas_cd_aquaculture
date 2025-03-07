@@ -20,14 +20,6 @@ rm(list=ls())
 ##### ----------------------------------------------------------------------------------------------
 ##### PACKAGES NEEDED ------------------------------------------------------------------------------
 ##### ----------------------------------------------------------------------------------------------
-# install.packages("dplyr")
-# install.packages("ggplot2")      # figures
-# install.packages("Rmisc")        # random cool functions
-# install.packages("fitdistrplus") # test distributions
-# install.packages("lubridate")    # date
-# install.packages("ggpubr")       # ggplot arrange
-# install.packages("stringr")      # character replacement
-# install.packages("glmmTMB")      # glmm
 library(dplyr)
 library(ggplot2)      # figures
 library(Rmisc)        # random cool functions
@@ -307,13 +299,11 @@ mean(dat[dat$date == "2024-02-06" & dat$treatment == "cd_high", ]$length)
 mean(dat[dat$date == "2024-02-06" & dat$treatment == "cd_high", ]$wr)
 summarySE(dat, measurevar = "length", groupvars = "date")
 summarySE(dat, measurevar = "wr", groupvars = "treatment", na.rm = TRUE)
+summarySE(dat, measurevar = "length", groupvars = "treatment", na.rm = TRUE)
+min(dat$nlr, na.rm = TRUE); max(dat$nlr, na.rm = TRUE)
+summarySE(dat, measurevar = "nlr", groupvars = "treatment", na.rm = TRUE)
 summarySE(dat, measurevar = "wr", groupvars = c("treatment", "date"), na.rm = TRUE)
 summarySE(dat_ysi, measurevar = "sal.ppt", groupvars = "salt", na.rm = TRUE)
-# how many blood smears in each group?
-count_nlr <- dat %>% 
-  dplyr::group_by(treatment) %>% 
-  dplyr::summarize(count = n())
-count_nlr
 
 # remove treatment group na's
 dat <- dat %>% 
@@ -324,6 +314,8 @@ dat$treatment <- as.factor(dat$treatment)
 summary(dat)
 
 dat$salt_time <- ifelse(dat$date < "2024-02-20", "pre", "post")
+dat$salt_time <- as.factor(dat$salt_time)
+summary(dat)
 
 
 
@@ -347,6 +339,12 @@ dat$blood_num <- ifelse(dat$date == "2024-02-08", 1,
 length(which(is.na(dat$nlr) == TRUE))
 dat <- dat %>% 
   filter(nlr != "NA")
+
+# how many blood smears in each group?
+count_nlr <- dat %>% 
+  dplyr::group_by(treatment) %>% 
+  dplyr::summarize(count = n())
+count_nlr
 
 hist(dat$nlr,
      breaks = 50)
@@ -813,23 +811,33 @@ fit_pfas_low_b3 <- glmmTMB(nlr ~ relevel(treatment, ref = "pfas_low") *
                              (1|id),
                            data = dat,
                            family = Gamma(link = "log"))
-summary(fit_control_b1)
 # anova(fit_control_b1)
 
-summary(fit_cd_high_b1)
+summary(fit_control_b1)
 summary(fit_cd_low_b1)
-summary(fit_pfas_high_b1)
+summary(fit_cd_high_b1)
 summary(fit_pfas_low_b1)
+summary(fit_pfas_high_b1)
+
 summary(fit_control_b2)
-summary(fit_cd_high_b2)
 summary(fit_cd_low_b2)
-summary(fit_pfas_high_b2)
+summary(fit_cd_high_b2)
 summary(fit_pfas_low_b2)
+summary(fit_pfas_high_b2)
+
 summary(fit_control_b3)
 summary(fit_cd_high_b3)
 summary(fit_cd_low_b3)
 summary(fit_pfas_high_b3)
 summary(fit_pfas_low_b3)
+
+coefs = summary(fit_pfas_high_b1)$coef
+coefs_est = exp(coefs$cond[,"Estimate"])
+uprs = exp(coefs$cond[,"Estimate"] + 1.96 * coefs$cond[,"Std. Error"])
+lwrs = exp(coefs$cond[,"Estimate"] - 1.96 * coefs$cond[,"Std. Error"])
+(uprs - 1) * 100       # upr CI %'s
+(coefs_est - 1) * 100  # coeficent estimates CI %'s
+(lwrs - 1) * 100       # lwr CI %'s
 
 test_fig <- ggplot(data = dat) +
   geom_jitter(mapping = aes(x = date,
