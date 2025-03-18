@@ -303,7 +303,7 @@ summarySE(dat, measurevar = "length", groupvars = "treatment", na.rm = TRUE)
 min(dat$nlr, na.rm = TRUE); max(dat$nlr, na.rm = TRUE)
 summarySE(dat, measurevar = "nlr", groupvars = "treatment", na.rm = TRUE)
 summarySE(dat, measurevar = "wr", groupvars = c("treatment", "date"), na.rm = TRUE)
-summarySE(dat_ysi, measurevar = "sal.ppt", groupvars = "salt", na.rm = TRUE)
+# summarySE(dat_ysi, measurevar = "sal.ppt", groupvars = "salt", na.rm = TRUE)
 
 # remove treatment group na's
 dat <- dat %>% 
@@ -811,6 +811,32 @@ fit_pfas_low_b3 <- glmmTMB(nlr ~ relevel(treatment, ref = "pfas_low") *
                              (1|id),
                            data = dat,
                            family = Gamma(link = "log"))
+# blood 4 ref
+fit_control_b4 <- glmmTMB(nlr ~ relevel(treatment, ref = "control") * 
+                            relevel(blood, ref = "Blood 4") + 
+                            (1|id),
+                          data = dat,
+                          family = Gamma(link = "log"))
+fit_cd_high_b4 <- glmmTMB(nlr ~ relevel(treatment, ref = "cd_high") *
+                            relevel(blood, ref = "Blood 4") +
+                            (1|id),
+                          data = dat,
+                          family = Gamma(link = "log"))
+fit_cd_low_b4 <- glmmTMB(nlr ~ relevel(treatment, ref = "cd_low") *
+                           relevel(blood, ref = "Blood 4") +
+                           (1|id),
+                         data = dat,
+                         family = Gamma(link = "log"))
+fit_pfas_high_b4 <- glmmTMB(nlr ~ relevel(treatment, ref = "pfas_high") * 
+                              relevel(blood, ref = "Blood 4") +
+                              (1|id),
+                            data = dat,
+                            family = Gamma(link = "log"))
+fit_pfas_low_b4 <- glmmTMB(nlr ~ relevel(treatment, ref = "pfas_low") * 
+                             relevel(blood, ref = "Blood 4") + 
+                             (1|id),
+                           data = dat,
+                           family = Gamma(link = "log"))
 # anova(fit_control_b1)
 
 summary(fit_control_b1)
@@ -826,18 +852,24 @@ summary(fit_pfas_low_b2)
 summary(fit_pfas_high_b2)
 
 summary(fit_control_b3)
-summary(fit_cd_high_b3)
 summary(fit_cd_low_b3)
-summary(fit_pfas_high_b3)
+summary(fit_cd_high_b3)
 summary(fit_pfas_low_b3)
+summary(fit_pfas_high_b3)
 
-coefs = summary(fit_pfas_high_b1)$coef
-coefs_est = exp(coefs$cond[,"Estimate"])
-uprs = exp(coefs$cond[,"Estimate"] + 1.96 * coefs$cond[,"Std. Error"])
-lwrs = exp(coefs$cond[,"Estimate"] - 1.96 * coefs$cond[,"Std. Error"])
-(uprs - 1) * 100       # upr CI %'s
-(coefs_est - 1) * 100  # coeficent estimates CI %'s
+summary(fit_control_b4)
+summary(fit_cd_low_b4)
+summary(fit_cd_high_b4)
+summary(fit_pfas_low_b4)
+summary(fit_pfas_high_b4)
+
+coefs <- summary(fit_control_b3)$coef
+coefs_est <- exp(coefs$cond[,"Estimate"])
+uprs <- exp(coefs$cond[,"Estimate"] + 1.96 * coefs$cond[,"Std. Error"])
+lwrs <- exp(coefs$cond[,"Estimate"] - 1.96 * coefs$cond[,"Std. Error"])
 (lwrs - 1) * 100       # lwr CI %'s
+(coefs_est - 1) * 100  # coeficent estimates CI %'s
+(uprs - 1) * 100       # upr CI %'s
 
 test_fig <- ggplot(data = dat) +
   geom_jitter(mapping = aes(x = date,
