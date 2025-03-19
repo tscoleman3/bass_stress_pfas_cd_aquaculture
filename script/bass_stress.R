@@ -85,7 +85,16 @@ ggplot() +
 dat_ysi$temp_c <- (dat_ysi$temp_f - 32) * (5 / 9)
 
 
-
+summarySE(dat_ysi, measurevar = "temp_c", na.rm = TRUE)
+summarySE(dat_ysi, measurevar = "do_mg.l", na.rm = TRUE)
+summarySE(dat_ysi, measurevar = "pH", na.rm = TRUE)
+summarySE(dat_ysi, measurevar = "sal.ppt", 
+          groupvars = "salt", na.rm = TRUE)
+summary(dat_ysi)
+salty <- dat_ysi[dat_ysi$salt == "Y", ]
+not_salty <- dat_ysi[dat_ysi$salt == "N", ]
+summary(salty$sal.ppt)
+summary(not_salty$sal.ppt)
 
 # scale_for_xaxis <- c("Week 1",
 #                      "Week 2",
@@ -303,7 +312,6 @@ summarySE(dat, measurevar = "length", groupvars = "treatment", na.rm = TRUE)
 min(dat$nlr, na.rm = TRUE); max(dat$nlr, na.rm = TRUE)
 summarySE(dat, measurevar = "nlr", groupvars = "treatment", na.rm = TRUE)
 summarySE(dat, measurevar = "wr", groupvars = c("treatment", "date"), na.rm = TRUE)
-# summarySE(dat_ysi, measurevar = "sal.ppt", groupvars = "salt", na.rm = TRUE)
 
 # remove treatment group na's
 dat <- dat %>% 
